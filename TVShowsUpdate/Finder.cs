@@ -35,7 +35,7 @@ namespace TVShowsUpdate
             String[,]
             data = new String[7, 150];
 
-
+            KickassKiler kiler = new KickassKiler();
             WebClient web = new WebClient();
            
             String html = web.DownloadString("http://www.imdb.com/title/"+code);
@@ -80,6 +80,7 @@ namespace TVShowsUpdate
                 System.IO.Directory.CreateDirectory(subPath);
             }
             web.DownloadFile(poster2.Groups[2].Value, @"D:\\app\\tv\\" + code+"\\poster.jpg");
+
 
 
 
@@ -196,7 +197,10 @@ namespace TVShowsUpdate
                 t++;
                 data[0, t] = sTXT+""+eTXT;
 
-              
+               
+                    kiler.ArrData(nazwa + "%20" + sTXT + "" + eTXT, code, sTXT + "" + eTXT);
+               
+
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                    
