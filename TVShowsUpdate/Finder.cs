@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -80,8 +82,13 @@ namespace TVShowsUpdate
                 System.IO.Directory.CreateDirectory(subPath);
             }
             web.DownloadFile(poster2.Groups[2].Value, @"D:\\app\\tv\\" + code+"\\poster.jpg");
+            ResizeImage ri = new ResizeImage();
+            Image img = new Bitmap(@"D:\\app\\tv\\" + code + "\\poster.jpg");
 
+            Stream newstream = ri.resize(ri.ToStream(img, ImageFormat.Jpeg));
+            Image newImg = System.Drawing.Image.FromStream(newstream);
 
+            newImg.Save(@"D:\\app\\tv\\" + code + "\\poster2.jpg", ImageFormat.Jpeg);
 
 
             String PosterTXT = poster2.Groups[2].ToString();
@@ -158,7 +165,14 @@ namespace TVShowsUpdate
             {
                Console.WriteLine(m.Groups[1].Value+t);
                 Console.WriteLine(m.Groups[1].Value);
-                DateTime myDate = DateTime.Parse(m.Groups[1].Value);
+                DateTime myDate = new DateTime(2016);
+                DateTime value;
+                if (DateTime.TryParse(m.Groups[1].Value, out value))
+                {
+                     myDate = DateTime.Parse(value.ToString());
+                }
+                else
+                
                 Console.WriteLine(myDate.ToString());
                 data[0, t] = m.Groups[1].Value;
                 t++;
@@ -199,7 +213,7 @@ namespace TVShowsUpdate
 
                
                     kiler.ArrData(nazwa + "%20" + sTXT + "" + eTXT, code, sTXT + "" + eTXT);
-               
+                         
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {

@@ -27,7 +27,7 @@ namespace TVShowsUpdate
             ImageFactory imageFactory = new ImageFactory();
            
             imageFactory.Load(stream);
-            imageFactory.Resize(new ResizeLayer(new Size(180, 120), ResizeMode.Crop, AnchorPosition.Center, false));
+            imageFactory.Resize(new ResizeLayer(new Size(160, 200), ResizeMode.Crop, AnchorPosition.Center, false));
             imageFactory.Save(stream);
             return stream;
         }

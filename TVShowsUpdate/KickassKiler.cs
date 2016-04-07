@@ -23,7 +23,10 @@ namespace TVShowsUpdate
 
             var client = new WebClient();
             client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            Stream stream = client.OpenRead("https://kat.cr/usearch/" + name + "/?field=seeders&sorder=desc");
+            name.Replace(" ", "%20");
+            try
+            {
+                Stream stream = client.OpenRead("https://kat.cr/usearch/" + name + "/?field=seeders&sorder=desc");
 
             
             GZipStream responseStream = new GZipStream(stream , CompressionMode.Decompress);
@@ -60,7 +63,7 @@ namespace TVShowsUpdate
 
                         CommandType = CommandType.Text,
                         CommandText =
-                            @"INSERT INTO  Torrent(IdEpisode,Rozmiar,Format,Seed,Peer,Magnet,Nazwa) VALUES (@IdEpisode,@Rozmiar,@Format,@Seed,@Peer,@Magnet,@Nazwa);"
+                            @"INSERT INTO  Torrent(IdShow,IdEpisode,Rozmiar,Format,Seed,Peer,Magnet,Nazwa) VALUES (@IdShow,@IdEpisode,@Rozmiar,@Format,@Seed,@Peer,@Magnet,@Nazwa);"
                     };
 
                     cmd.Connection = connection;
@@ -77,6 +80,14 @@ namespace TVShowsUpdate
                     connection.Close();
                 }
 
+            }
+            return data;
+            }
+            catch (System.Net.WebException e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine("-----------------------------------ERROR-------------------"+idS+idE);
+                data[0,0] = "Error";
             }
             return data;
         }
